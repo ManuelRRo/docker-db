@@ -1,0 +1,20 @@
+services:
+  oracleserver:
+    image: container-registry.oracle.com/database/free:latest
+    container_name: oracleserver
+    env_file: .env
+    ports:
+      - 1521:1521
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - oracle-backup:/opt/oracle/backup
+    healthcheck:
+      test: ["CMD", "sqlplus", "-L", "sys/Oracle_123@//localhost:1521/ORCLCDB as sysdba", "@healthcheck.sql"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  oracle-data:
+  oracle-backup:
+#sqlplus sys/Oracle_123@FREE as sysdba
